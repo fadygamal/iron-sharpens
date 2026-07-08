@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iron Sharpens Iron — A Journey Toward the Promise</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --ink:#2B1055;
+  --horizon:#FF3CAC;
+  --gold:#FFC93C;
+  --goldSoft:#FFE066;
+  --rust:#FF6B6B;
+  --teal:#17D6C9;
+  --sand:#FFFDF9;
+  --sandDim:#F3ECFF;
+  --ash:#8D8AA6;
+  --night:#1A1030;
+  --violet:#9B5DE5;
+}
+
+*{ box-sizing: border-box; }
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  font-family:'Inter', sans-serif;
+  background: radial-gradient(circle at 30% 0%, var(--horizon), var(--ink) 60%, var(--night) 100%);
+}
+.font-display{ font-family:'Cinzel', serif; }
+
+.card{
+  width:100%;
+  max-width:560px;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  background: var(--sand);
+  border:1px solid var(--sandDim);
+}
+
+.header{
+  padding:24px 24px 16px;
+  background: linear-gradient(135deg, var(--ink), var(--horizon));
+}
+.header .eyebrow{
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color: var(--goldSoft);
+  margin:0;
+}
+.header h1{
+  font-size:28px;
+  margin:6px 0 0;
+  color: var(--sand);
+}
+
+.jars-row{
+  display:flex;
+  justify-content:space-around;
+  padding:12px 8px;
+  background: var(--sandDim);
+}
+.jar-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+.jar-label{
+  font-size:10px;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+  color: var(--ash);
+}
+.jar-value{
+  font-size:12px;
+  font-weight:600;
+}
+
+.path-wrap{
+  padding:12px 16px 0;
+  overflow-x:auto;
+}
+.path-track{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  width:max-content;
+  padding:0 4px;
+}
+.node{
+  width:28px; height:28px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700;
+  flex-shrink:0;
+  border:1.5px solid var(--ash);
+  color: var(--ash);
+  background:transparent;
+}
+.node.past{ background: var(--teal); border-color:transparent; color:var(--sand); }
+.node.current{ background: var(--gold); border-color:transparent; color:var(--night); box-shadow:0 0 0 3px rgba(255,201,60,0.35); }
+.connector{ width:16px; height:2px; background: var(--ash); opacity:0.3; flex-shrink:0; }
+.connector.past{ background: var(--teal); opacity:0.9; }
+
+.content{ padding:24px; }
+.space-y > * + *{ margin-top:14px; }
+
+p.body-text{ font-size:14px; line-height:1.6; color: var(--night); margin:0; }
+
+label.field-label{
+  font-size:11px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600; color:var(--ash);
+  display:block; margin-bottom:6px;
+}
+input#goalInput{
+  width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--sandDim);
+  font-size:14px; color:var(--night); background:#fff; outline:none;
+}
+
+button.btn{
+  width:100%; border:none; border-radius:10px; padding:13px; font-size:14px;
+  letter-spacing:0.5px; cursor:pointer; font-family:'Cinzel', serif;
+}
+button.btn:hover{ filter: brightness(1.05); }
+.btn-gold{ background: var(--gold); color: var(--night); }
+.btn-teal{ background: var(--teal); color: var(--sand); }
+
+.archetype-row{ display:flex; align-items:center; gap:8px; }
+.archetype-icon{ font-size:18px; color:var(--rust); }
+.archetype-name{ font-size:11px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600; color:var(--rust); }
+h2.scenario-title{ font-size:19px; margin:6px 0 0; color:var(--night); font-family:'Cinzel', serif; }
+
+.option-btn{
+  width:100%; text-align:left; font-size:14px; border-radius:10px; padding:12px 16px;
+  background:#fff; border:1px solid var(--sandDim); color:var(--night); cursor:pointer;
+  display:block; margin-top:8px;
+}
+.option-btn:hover{ border-color: var(--gold); }
+
+.outcome-box{
+  border-radius:10px; padding:16px; background: var(--sandDim);
+  border-right: 3px solid var(--gold);
+}
+.outcome-ref{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--gold); margin:0 0 4px; }
+.outcome-note{ font-size:14px; font-style:italic; line-height:1.6; color:var(--night); margin:0; }
+
+.finish-wrap{ text-align:center; }
+.finish-eyebrow{ font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-family:'Cinzel', serif; margin:0; }
+.finish-title{ font-size:22px; color:var(--night); font-family:'Cinzel', serif; margin:6px 0 0; }
+.jars-final{ display:flex; justify-content:center; gap:16px; margin-top:14px; }
+.profile-box{ text-align:left; margin-top:14px; }
+.footer-note{ font-size:12px; color:var(--ash); line-height:1.6; margin-top:14px; }
+
+.hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <p class="eyebrow">A Journey Toward the Promise</p>
+    <h1 class="font-display">Iron Sharpens Iron</h1>
+  </div>
+
+  <div id="jarsRow" class="jars-row hidden"></div>
+  <div id="pathWrap" class="path-wrap hidden"><div class="path-track" id="pathTrack"></div></div>
+
+  <div class="content">
+    <!-- INTRO -->
+    <div id="screen-intro" class="space-y">
+      <p class="body-text">Every journey toward what God has called you to runs straight through difficult people — accusers, manipulators, betrayers, doubters, rivals. This game walks you through 13 real-feeling encounters, each one mirrored by a figure from Scripture who faced the same thing.</p>
+      <p class="body-text">There's no single right answer — but some responses build real character (Patience, Wisdom, Forgiveness, Courage) and some quietly drain it. Watch the jars.</p>
+      <div>
+        <label class="field-label" for="goalInput">Name your "Promised Land" (optional)</label>
+        <input id="goalInput" type="text" placeholder="e.g. Starting a ministry, healing a friendship...">
+      </div>
+      <button class="btn btn-gold" onclick="beginGame()">Begin the Journey</button>
+    </div>
+
+    <!-- PLAYING -->
+    <div id="screen-playing" class="space-y hidden">
+      <div class="archetype-row">
+        <span class="archetype-icon" id="pIcon"></span>
+        <span class="archetype-name" id="pArchetype"></span>
+      </div>
+      <h2 class="scenario-title" id="pTitle"></h2>
+      <p class="body-text" id="pScenario"></p>
+      <div id="pOptions"></div>
+    </div>
+
+    <!-- OUTCOME -->
+    <div id="screen-outcome" class="space-y hidden">
+      <p class="body-text" id="oOutcome"></p>
+      <div class="outcome-box">
+        <p class="outcome-ref" id="oRef"></p>
+        <p class="outcome-note" id="oNote"></p>
+      </div>
+      <button class="btn btn-teal" id="continueBtn" onclick="advance()">Continue the Journey</button>
+    </div>
+
+    <!-- FINISHED -->
+    <div id="screen-finished" class="finish-wrap hidden">
+      <p class="finish-eyebrow">You Have Arrived</p>
+      <h2 class="finish-title" id="fGoal">Your Promised Land</h2>
+      <div class="jars-final" id="finalJars"></div>
+      <div class="outcome-box profile-box">
+        <p class="outcome-ref" id="fTraitLine"></p>
+        <p class="outcome-note" id="fProfileLine"></p>
+      </div>
+      <p class="footer-note">Difficult people don't disappear once you reach the goal — but the character built along the way travels with you into whatever comes next.</p>
+      <button class="btn btn-gold" style="margin-top:14px;" onclick="location.reload()">Walk the Journey Again</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TRAITS = [
+  { key: "patience", label: "Patience", color: "var(--teal)" },
+  { key: "wisdom", label: "Wisdom", color: "var(--gold)" },
+  { key: "forgiveness", label: "Forgiveness", color: "var(--rust)" },
+  { key: "courage", label: "Courage", color: "var(--violet)" },
+];
+
+const EVENTS = [
+  { archetype: "The Accuser", icon: "◈", title: "The Accuser at the Gate",
+    scenario: "A senior teammate tells your small group leader you've been slacking off — but you did the work, and she never asked you directly. People are starting to look at you differently.",
+    options: [
+      { text: "Confront her publicly and demand she take it back", deltas: { courage: 1, wisdom: -1 }, outcome: "It becomes a shouting match. Nobody remembers the truth — only the scene.", ref: "1 Samuel 24", note: "David had Saul's life in his hands in the cave, yet refused to strike him publicly — he let his integrity speak instead of his fists." },
+      { text: "Quietly show the leader the evidence of your work, without attacking her", deltas: { wisdom: 2, patience: 1 }, outcome: "The truth surfaces calmly. Your leader trusts you more, not less.", ref: "1 Samuel 24:11-12", note: "David presented the evidence — a piece of Saul's robe — and let it speak. He judged the matter, not the person." },
+      { text: "Say nothing and let the rumor die on its own", deltas: { patience: 1, courage: -1 }, outcome: "The rumor doesn't die — it grows in the silence you left behind.", ref: "Psalm 35:11", note: "David didn't stay silent forever — he brought false witnesses before God directly, naming the injustice." },
+    ]},
+  { archetype: "The Accuser", icon: "◈", title: "Whispers Before the Interview",
+    scenario: "You're about to interview for a leadership spot on your ministry team. Someone spreads a half-true story about something you did last year, timed right before your interview.",
+    options: [
+      { text: "Withdraw from the interview to avoid the drama", deltas: { courage: -1, patience: 1 }, outcome: "The story is left unanswered — and unanswered stories get believed.", ref: "Daniel 6:4", note: "Daniel's rivals searched for any charge against him and found none, because his integrity was already consistent, not because he hid." },
+      { text: "Go in, be honest about the past, and let your character since then speak", deltas: { courage: 2, wisdom: 1 }, outcome: "The panel respects your honesty more than a spotless story would have earned.", ref: "Daniel 6:10", note: "Daniel kept doing exactly what he'd always done — praying openly — even knowing it would be used against him." },
+      { text: "Spread something true but embarrassing about the accuser in return", deltas: { forgiveness: -2 }, outcome: "Now there are two rumors instead of one, and your name is in both.", ref: "Romans 12:19", note: "Leave room for God's justice — repaying accusation with accusation multiplies the wound." },
+    ]},
+  { archetype: "The Manipulator", icon: "◇", title: "The Moving Goalpost",
+    scenario: "You agreed to lead worship for a youth event under certain terms. The organizer keeps changing what's expected — more songs, less pay in volunteer hours, tighter deadline — every time you meet.",
+    options: [
+      { text: "Agree to everything to keep the peace", deltas: { patience: 1, wisdom: -1 }, outcome: "The goalposts keep moving, because moving them worked.", ref: "Genesis 31:7", note: "Jacob served Laban honestly while Laban changed his wages ten times — but Jacob didn't keep quietly absorbing it forever." },
+      { text: "Get everything in writing and hold both of you to it going forward", deltas: { wisdom: 2, courage: 1 }, outcome: "The relationship gets clearer, not colder — manipulation loses its grip when things are named.", ref: "Genesis 31:36-42", note: "Eventually Jacob confronted Laban directly, laying out exactly how he'd been treated — clarity, not avoidance." },
+      { text: "Quit the moment terms change, without a conversation", deltas: { courage: 1, patience: -1 }, outcome: "You avoid the manipulation, but also skip the chance to set a boundary that could have held.", ref: "Proverbs 15:1", note: "A gentle, clear answer turns away wrath — leaving without a word teaches nothing and settles nothing." },
+    ]},
+  { archetype: "The Manipulator", icon: "◇", title: "Guilt as Currency",
+    scenario: "A close friend keeps saying things like \"I guess I'll just handle it alone, like always\" whenever you can't help immediately — even when you have a real reason.",
+    options: [
+      { text: "Drop everything every time so they don't feel hurt", deltas: { patience: -1, wisdom: -1 }, outcome: "The guilt trip keeps working, and your own responsibilities start to suffer.", ref: "Galatians 1:10", note: "Paul asked plainly whether he was trying to please people or God — approval-seeking isn't the same as love." },
+      { text: "Name the pattern kindly and set a boundary about what you can offer", deltas: { wisdom: 2, courage: 1 }, outcome: "It's uncomfortable at first, but the friendship becomes more honest.", ref: "Ephesians 4:15", note: "Speaking the truth in love — not silence, not harshness — is how real relationships grow." },
+      { text: "Distance yourself from the friendship without explanation", deltas: { forgiveness: -1, patience: -1 }, outcome: "The tension never gets resolved — it just goes quiet.", ref: "Matthew 18:15", note: "Go and address the issue directly with the person, rather than letting distance do the talking." },
+    ]},
+  { archetype: "The Betrayer", icon: "✦", title: "Sold Out by a Friend",
+    scenario: "A close friend told others something you shared in confidence, and it got twisted along the way. Now people are treating you differently — and it was your friend who started it.",
+    options: [
+      { text: "Cut them off completely, no conversation", deltas: { forgiveness: -1, courage: 1 }, outcome: "Clean break, but the wound stays open — and you're both worse for it.", ref: "Genesis 45:4-5", note: "Joseph's own brothers sold him into slavery — betrayal from the inside, not an enemy." },
+      { text: "Confront them honestly, then choose to forgive even if they don't fully understand the hurt", deltas: { forgiveness: 2, courage: 1 }, outcome: "It costs you something, but resentment doesn't get to move in.", ref: "Genesis 45:5-8", note: "Joseph told his brothers plainly what they'd done, and still said, 'You meant evil, but God meant it for good.'" },
+      { text: "Get even by exposing something private of theirs", deltas: { forgiveness: -2 }, outcome: "Now you're the one who broke trust too.", ref: "Romans 12:17", note: "Repay no one evil for evil — retaliation just multiplies the betrayal instead of ending it." },
+    ]},
+  { archetype: "The Betrayer", icon: "✦", title: "The Inner Circle Turns",
+    scenario: "Someone you personally mentored and defended starts undermining you behind your back to gain favor with the group.",
+    options: [
+      { text: "Publicly call them out in front of everyone", deltas: { courage: 1, forgiveness: -1 }, outcome: "You win the moment, but the relationship is unlikely to recover.", ref: "Psalm 41:9", note: "Even a close friend who shared bread turned against him — betrayal from someone trusted cuts deepest." },
+      { text: "Address it privately, stay honest, and keep the door open for repair", deltas: { forgiveness: 1, wisdom: 2 }, outcome: "It's a hard conversation, but it's the kind that can actually rebuild something.", ref: "Matthew 18:15", note: "Go directly, privately first — protecting both the relationship and the truth." },
+      { text: "Pretend you don't notice and hope it resolves itself", deltas: { patience: -1, wisdom: -1 }, outcome: "The undermining continues, unaddressed and unresolved.", ref: "Proverbs 27:6", note: "Faithful are the wounds of a friend — silence isn't the same as peace." },
+    ]},
+  { archetype: "The Doubter", icon: "○", title: "Ten Voices Against One",
+    scenario: "You feel called to start something new — a ministry, a project, a bold idea — but almost everyone around you lists reasons it won't work.",
+    options: [
+      { text: "Drop the idea since so many people doubt it", deltas: { courage: -2 }, outcome: "The idea dies quietly, and you'll wonder about it for years.", ref: "Numbers 13:31-33", note: "Ten of the twelve spies said the giants were too big — and convinced a whole generation to give up on the promise." },
+      { text: "Hold on to the calling, gather the few who believe with you, and move forward carefully", deltas: { courage: 2, wisdom: 1 }, outcome: "Progress is slower with fewer hands, but it's real.", ref: "Numbers 14:6-9", note: "Caleb and Joshua stood by their report though they were outnumbered ten to two." },
+      { text: "Push forward alone and ignore all input, even the fair concerns", deltas: { courage: 1, wisdom: -1 }, outcome: "Some of the doubts turn out to have been useful warnings you missed.", ref: "Proverbs 15:22", note: "Plans fail without counsel — even a bold calling benefits from wise input, not just conviction." },
+    ]},
+  { archetype: "The Doubter", icon: "○", title: "\"Can Anything Good Come From That?\"",
+    scenario: "People dismiss your idea before even hearing it out, just because of where it came from or who you are — your background, your age, your reputation.",
+    options: [
+      { text: "Argue loudly that they're wrong to underestimate you", deltas: { courage: 1, patience: -1 }, outcome: "You're technically right, but nobody's listening anymore.", ref: "John 1:46", note: "\"Can anything good come out of Nazareth?\" was the dismissal Jesus himself faced." },
+      { text: "Let your work speak — invite them to come and see for themselves", deltas: { wisdom: 2, courage: 1 }, outcome: "Skepticism fades slowly, but it fades because of evidence, not argument.", ref: "John 1:46", note: "Philip's answer to the dismissal wasn't a debate — it was simply, 'Come and see.'" },
+      { text: "Give up trying to prove yourself to that group entirely", deltas: { patience: 1, courage: -1 }, outcome: "You stop being hurt by them, but you also stop growing where they could have seen change.", ref: "1 Timothy 4:12", note: "Let no one look down on you for your youth — but set an example, don't just withdraw from it." },
+    ]},
+  { archetype: "The Rival", icon: "▲", title: "The Favored Coat",
+    scenario: "You get recognized publicly for something — an award, a compliment from leadership, a spotlight moment — and a close friend's jealousy turns cold and distant.",
+    options: [
+      { text: "Downplay your achievement so they feel better", deltas: { wisdom: -1, patience: 1 }, outcome: "You shrink yourself, and the tension doesn't actually go away.", ref: "Genesis 37:3-4", note: "Joseph's brothers hated him because their father favored him — and no amount of Joseph hiding it changed their hearts." },
+      { text: "Stay warm toward them, give them credit too, and let time work on the relationship", deltas: { patience: 2, forgiveness: 1 }, outcome: "The coldness doesn't vanish overnight, but the door stays open.", ref: "Genesis 45:4-5", note: "Years later, Joseph still chose relationship over resentment when he had all the power to do otherwise." },
+      { text: "Match their coldness with your own distance", deltas: { forgiveness: -1 }, outcome: "Two people quietly avoiding each other — nothing gets better.", ref: "Romans 12:18", note: "As far as it depends on you, live at peace with everyone — even when the other side isn't ready yet." },
+    ]},
+  { archetype: "The Rival", icon: "▲", title: "Comparison in the Ranks",
+    scenario: "\"They're worth ten of you\" — a saying like this starts circulating, comparing you unfavorably to someone else on your team, and it gets back to you.",
+    options: [
+      { text: "Try to outperform them to prove the comparison wrong", deltas: { courage: 1, patience: -1 }, outcome: "You're now running a race nobody asked you to run, exhausted and still not at peace.", ref: "1 Samuel 18:7-9", note: "The song about Saul and David's kill counts planted a jealousy that ate at Saul for the rest of his life." },
+      { text: "Let go of the comparison and focus on your own calling, not the scoreboard", deltas: { wisdom: 2, patience: 1 }, outcome: "You stop measuring your worth by someone else's applause.", ref: "Galatians 6:4-5", note: "Each should test their own work — your load is your own, not a scale against someone else's." },
+      { text: "Undermine the other person's reputation quietly to level the field", deltas: { forgiveness: -2, wisdom: -1 }, outcome: "You've become the very rivalry you were hurt by.", ref: "James 3:16", note: "Where jealousy and rivalry exist, there is disorder and every kind of evil practice." },
+    ]},
+];
+
+const WALL_EVENTS = [
+  { archetype: "Opposition at the Wall", icon: "▦", title: "They Mock the Work",
+    scenario: "You're partway into a project you believe God gave you — and instead of help, you get mockery: \"What are they even building? A fox could knock that down.\"",
+    options: [
+      { text: "Stop and defend the project's worth to every critic", deltas: { patience: -1, courage: -1 }, outcome: "You're spending your energy arguing instead of building.", ref: "Nehemiah 4:1-3", note: "Sanballat and Tobiah mocked the wall's rebuilding — Nehemiah didn't stop to argue with them." },
+      { text: "Pray briefly about it, then keep building at the same pace", deltas: { courage: 2, patience: 1 }, outcome: "The wall rises. The mockery doesn't stop it, because you didn't hand it your attention.", ref: "Nehemiah 4:4-6", note: "Nehemiah prayed and 'the people had a mind to work' — they kept going." },
+      { text: "Quietly slow down, hoping the criticism fades if the project looks less ambitious", deltas: { courage: -2 }, outcome: "The project stalls, and the critics take the silence as confirmation they were right.", ref: "Nehemiah 6:3", note: "Nehemiah's answer to distraction was, 'I am doing a great work and cannot come down.'" },
+    ]},
+  { archetype: "Fear from the Outside", icon: "▦", title: "A Threat, and a Trap",
+    scenario: "Someone invites you to an urgent \"meeting\" that feels off — it seems designed to pull you away from what you're actually called to finish right now.",
+    options: [
+      { text: "Go, just to keep the peace and not seem difficult", deltas: { wisdom: -1, courage: -1 }, outcome: "The distraction succeeds, and the real work loses a day it didn't have to lose.", ref: "Nehemiah 6:2-4", note: "Sanballat asked to meet Nehemiah four separate times — each one a plan to stop the work, not help it." },
+      { text: "Decline clearly, name your priority, and keep working", deltas: { courage: 2, wisdom: 1 }, outcome: "The invitation stops coming after the third refusal — persistence works both ways.", ref: "Nehemiah 6:3-4", note: "Nehemiah sent the same answer every time: 'Why should the work stop while I leave it?'" },
+      { text: "Go, and let paranoia about their motives distract you from then on", deltas: { patience: -1, wisdom: -1 }, outcome: "You finish the meeting, but you've lost focus for a lot longer than the meeting took.", ref: "Nehemiah 6:9", note: "Nehemiah's response to the fear campaign was a short prayer: 'Now, strengthen my hands.'" },
+    ]},
+  { archetype: "Discouragement from Within", icon: "▦", title: "\"We Are Worn Out\"",
+    scenario: "Your own team starts saying the goal is too big — \"there's too much rubble, we'll never finish this\" — and morale is dropping fast, from inside, not outside.",
+    options: [
+      { text: "Push everyone harder without acknowledging the exhaustion", deltas: { patience: -1, wisdom: -1 }, outcome: "People burn out faster, and quietly start to check out.", ref: "Nehemiah 4:10", note: "Judah said, 'the strength of the laborers is failing... we are not able to go on with the wall.'" },
+      { text: "Acknowledge the exhaustion honestly, reorganize the plan, and keep morale and momentum together", deltas: { wisdom: 2, courage: 1 }, outcome: "The plan gets more realistic, and people find fresh resolve because they were heard.", ref: "Nehemiah 4:13-14", note: "Nehemiah reorganized the people by families with weapons and reminded them: 'Do not be afraid... remember the Lord.'" },
+      { text: "Let the whole thing quietly stall since morale is low anyway", deltas: { courage: -2, patience: 1 }, outcome: "The rubble stays rubble. Nothing gets rebuilt.", ref: "Nehemiah 6:15-16", note: "Against real discouragement, the wall was still finished in 52 days — a stunning pace their enemies couldn't explain." },
+    ]},
+];
+
+const PROFILES = {
+  patience: { figure: "Abraham", line: "You wait on God's timing the way Abraham waited twenty-five years for a promised son — trusting the pace, not just the outcome." },
+  wisdom: { figure: "Daniel", line: "You navigate hard rooms the way Daniel navigated a foreign court — calm, discerning, unwilling to compromise what mattered." },
+  forgiveness: { figure: "Joseph", line: "You release what was done to you the way Joseph released his brothers — 'you meant evil, but God meant it for good.'" },
+  courage: { figure: "Nehemiah", line: "You keep building under pressure the way Nehemiah kept building the wall — refusing to come down from the work." },
+};
+
+function shuffle(arr){
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let deck = shuffle([...EVENTS, ...WALL_EVENTS]);
+const total = deck.length;
+let step = 0;
+let points = { patience: 0, wisdom: 0, forgiveness: 0, courage: 0 };
+let goalName = "";
+
+function jarSVG(trait, value, max){
+  const pct = Math.max(0, Math.min(1, value / max));
+  const fillHeight = 46 * pct;
+  const clipId = "clip-" + trait.key + "-" + Math.random().toString(36).slice(2,7);
+  return `
+    <div class="jar-wrap">
+      <svg width="40" height="56" viewBox="0 0 40 56">
+        <defs>
+          <clipPath id="${clipId}">
+            <rect x="4" y="${52 - fillHeight}" width="32" height="${fillHeight}" rx="3" />
+          </clipPath>
+        </defs>
+        <path d="M12 4 H28 V10 C28 12 32 13 34 18 V48 C34 52 30 54 26 54 H14 C10 54 6 52 6 48 V18 C8 13 12 12 12 10 Z"
+          fill="none" stroke="var(--sandDim)" stroke-width="2" />
+        <rect x="4" y="6" width="32" height="46" rx="3" clip-path="url(#${clipId})" fill="${trait.color}" opacity="0.85" />
+      </svg>
+      <span class="jar-label">${trait.label}</span>
+      <span class="jar-value" style="color:${trait.color}">${value}</span>
+    </div>`;
+}
+
+function renderJars(containerId, max){
+  document.getElementById(containerId).innerHTML = TRAITS.map(t => jarSVG(t, points[t.key] || 0, max)).join("");
+}
+
+function renderPath(){
+  const nodesCount = total + 2;
+  let html = "";
+  for (let i = 0; i < nodesCount; i++){
+    const isStart = i === 0;
+    const isFinish = i === nodesCount - 1;
+    const isPast = i < step + 1;
+    const isCurrent = i === step + 1 && !isFinish;
+    const label = isStart ? "◎" : isFinish ? "★" : String(i);
+    let cls = "node";
+    if (isCurrent) cls += " current"; else if (isPast) cls += " past";
+    html += `<div class="${cls}">${label}</div>`;
+    if (i < nodesCount - 1){
+      html += `<div class="connector ${isPast ? 'past' : ''}"></div>`;
+    }
+  }
+  document.getElementById("pathTrack").innerHTML = html;
+}
+
+function showScreen(name){
+  ["intro","playing","outcome","finished"].forEach(s => {
+    document.getElementById("screen-" + s).classList.toggle("hidden", s !== name);
+  });
+  document.getElementById("jarsRow").classList.toggle("hidden", name === "intro");
+  document.getElementById("pathWrap").classList.toggle("hidden", name === "intro" || name === "finished");
+}
+
+function beginGame(){
+  goalName = document.getElementById("goalInput").value.trim();
+  renderJars("jarsRow", 10);
+  renderPath();
+  renderCurrentCard();
+  showScreen("playing");
+}
+
+function renderCurrentCard(){
+  const c = deck[step];
+  document.getElementById("pIcon").textContent = c.icon;
+  document.getElementById("pArchetype").textContent = c.archetype;
+  document.getElementById("pTitle").textContent = c.title;
+  document.getElementById("pScenario").textContent = c.scenario;
+  const optsHtml = c.options.map((opt, i) =>
+    `<button class="option-btn" onclick="choose(${i})">${opt.text}</button>`
+  ).join("");
+  document.getElementById("pOptions").innerHTML = optsHtml;
+}
+
+let lastChoice = null;
+
+function choose(i){
+  const opt = deck[step].options[i];
+  Object.entries(opt.deltas).forEach(([k, v]) => { points[k] = (points[k] || 0) + v; });
+  lastChoice = opt;
+  renderJars("jarsRow", 10);
+  document.getElementById("oOutcome").textContent = opt.outcome;
+  document.getElementById("oRef").textContent = opt.ref;
+  document.getElementById("oNote").textContent = opt.note;
+  document.getElementById("continueBtn").textContent = (step + 1 >= total) ? "See Your Journey's End" : "Continue the Journey";
+  showScreen("outcome");
+}
+
+function advance(){
+  if (step + 1 >= total){
+    finishGame();
+  } else {
+    step += 1;
+    renderPath();
+    renderCurrentCard();
+    showScreen("playing");
+  }
+}
+
+function finishGame(){
+  document.getElementById("fGoal").textContent = goalName || "Your Promised Land";
+  renderJars("finalJars", 10);
+  let topKey = TRAITS[0].key;
+  TRAITS.forEach(t => { if ((points[t.key] || 0) > (points[topKey] || 0)) topKey = t.key; });
+  const topTrait = TRAITS.find(t => t.key === topKey);
+  const profile = PROFILES[topKey];
+  document.getElementById("fTraitLine").textContent = `Strongest trait: ${topTrait.label} — like ${profile.figure}`;
+  document.getElementById("fProfileLine").textContent = profile.line;
+  showScreen("finished");
+}
+</script>
+</body>
+</html>
